@@ -32,3 +32,16 @@ Route::post('/dispositivos/asignar', [DispositivoController::class, 'asignar'])-
 Route::put('/devices/{id}/cambiar-estado', [App\Http\Controllers\DispositivoController::class, 'cambiarEstado'])
     ->name('dispositivos.cambiarEstado');
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::group(['prefix' => 'dashboard'], function(){
+    Route::get("/", function() {
+    return view('admin.dashboard');
+    });
+    Route::get("/users",[UsersController::class,'getUsers']);
+    Route::post("/users",[UsersController::class,'createUsers']);
+});
