@@ -19,7 +19,8 @@ Route::delete('/devices/{id}', [DispositivoController::class, 'destroy'])->name(
 // 🔹 RUTAS ADMIN
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
-});
+})->name('dashboard');
+
 
 // 🔹 RUTAS DE USUARIOS
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -28,4 +29,6 @@ Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edi
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 Route::post('/dispositivos/asignar', [DispositivoController::class, 'asignar'])->name('dispositivos.asignar');
+Route::put('/devices/{id}/cambiar-estado', [App\Http\Controllers\DispositivoController::class, 'cambiarEstado'])
+    ->name('dispositivos.cambiarEstado');
 

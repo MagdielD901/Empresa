@@ -78,6 +78,13 @@
                            Editar
                         </a>
 
+                        <a href="javascript:;" 
+                           class="text-info font-weight-bold text-xs me-3 btnCambiarEstado"
+                           data-id="{{ $dispositivo->id }}"
+                           data-estado="{{ $dispositivo->estado }}">
+                           Cambiar estado
+                        </a>
+
                         <form action="{{ route('dispositivos.destroy', $dispositivo->id) }}" method="POST" style="display:inline;">
                           @csrf
                           @method('DELETE')
@@ -137,12 +144,46 @@
                     <option value="Disponible">Disponible</option>
                     <option value="En uso">En uso</option>
                     <option value="Dañado">Dañado</option>
+                    <option value="Asignado">Asignado</option>
                   </select>
                 </div>
 
                 <div class="modal-footer">
                   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
                   <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Cambiar Estado -->
+      <div class="modal fade" id="modalCambiarEstado" tabindex="-1" aria-labelledby="modalCambiarEstadoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalCambiarEstadoLabel">Cambiar estado del dispositivo</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <form id="formCambiarEstado" method="POST">
+                @csrf
+                @method('PUT')
+
+                <div class="mb-3">
+                  <label class="form-label">Nuevo estado</label>
+                  <select class="form-control" name="estado" id="nuevo_estado" required>
+                    <option value="Disponible">Disponible</option>
+                    <option value="En uso">En uso</option>
+                    <option value="Dañado">Dañado</option>
+                    <option value="Asignado">Asignado</option>
+                  </select>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-success">Guardar cambios</button>
                 </div>
               </form>
             </div>
@@ -185,6 +226,17 @@
         document.getElementById('estado').value = this.dataset.estado;
 
         new bootstrap.Modal(document.getElementById('modalDispositivo')).show();
+      });
+    });
+
+    // Abre modal para cambiar estado
+    document.querySelectorAll('.btnCambiarEstado').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const estadoActual = this.dataset.estado;
+        document.getElementById('nuevo_estado').value = estadoActual;
+        document.getElementById('formCambiarEstado').action = '/devices/' + id + '/cambiar-estado';
+        new bootstrap.Modal(document.getElementById('modalCambiarEstado')).show();
       });
     });
   </script>

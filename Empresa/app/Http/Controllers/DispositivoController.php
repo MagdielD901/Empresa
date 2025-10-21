@@ -84,4 +84,24 @@ class DispositivoController extends Controller
     return redirect()->back()->with('success', 'Dispositivo asignado correctamente.');
 }
 
+public function cambiarEstado(Request $request, $id)
+{
+    $request->validate([
+        'estado' => 'required|string',
+    ]);
+
+    $dispositivo = Dispositivo::findOrFail($id);
+    $dispositivo->estado = $request->estado;
+
+    // Si el nuevo estado es "Disponible", eliminamos su relación con el usuario (si la tiene)
+    if ($request->estado === 'Disponible' && $dispositivo->usuario_id) {
+        $dispositivo->usuario_id = null;
+    }
+
+    $dispositivo->save();
+
+    return redirect()->back()->with('success', 'Estado del dispositivo actualizado correctamente.');
+}
+
+
 }
