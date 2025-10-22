@@ -35,5 +35,21 @@ Route::post('/dispositivos/asignar', [DispositivoController::class, 'asignar'])-
 Route::put('/devices/{id}/cambiar-estado', [App\Http\Controllers\DispositivoController::class, 'cambiarEstado'])
     ->name('dispositivos.cambiarEstado');
 
+
 //Ruta de la carta poder
 Route::get('/users/{id}/carta-poder', [CartaPoderController::class, 'generarCarta'])->name('users.cartaPoder');
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::group(['prefix' => 'dashboard'], function(){
+    Route::get("/", function() {
+    return view('admin.dashboard');
+    });
+    Route::get("/users",[UsersController::class,'getUsers']);
+    Route::post("/users",[UsersController::class,'createUsers']);
+});
+
