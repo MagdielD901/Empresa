@@ -90,7 +90,11 @@
                         @endif
                       </td>
                       <td class="align-middle text-center">
-                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs">Generar</a>
+                          <a href="{{ route('users.cartaPoder', $user->id) }}" 
+                          class="text-secondary font-weight-bold text-xs" 
+                          target="_blank">
+                          Generar
+                          </a>
                       </td>
                       <td class="align-middle text-center">
                         <a href="javascript:;" 

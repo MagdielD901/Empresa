@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DispositivoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CartaPoderController;
+
+
 
 // 🔹 RUTA PRINCIPAL
 Route::get('/', function () {
@@ -32,3 +35,5 @@ Route::post('/dispositivos/asignar', [DispositivoController::class, 'asignar'])-
 Route::put('/devices/{id}/cambiar-estado', [App\Http\Controllers\DispositivoController::class, 'cambiarEstado'])
     ->name('dispositivos.cambiarEstado');
 
+//Ruta de la carta poder
+Route::get('/users/{id}/carta-poder', [CartaPoderController::class, 'generarCarta'])->name('users.cartaPoder');
