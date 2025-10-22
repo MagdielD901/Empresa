@@ -29,12 +29,13 @@ class CartaPoderController extends Controller
         $qr= QrCode::size(300)->generate('A simple example of QR code'); 
        
         // Genera el SVG (string)
-
+$codigo=base64_encode($qr);
         // Pasamos el SVG crudo a la vista. En la vista lo insertaremos con {!! $qrSvg !!}
         $pdf = Pdf::loadView('pdf.carta_poder', [
             'user' => $user,
-            'qr' => $qr,
+            'qr' => $codigo,
         ]);
+        
 
         // Descargar automáticamente
         $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $user->name);
@@ -42,6 +43,6 @@ class CartaPoderController extends Controller
       
         return view('pdf.carta_poder')
         ->with('user',$user)
-        ->with('qr',$qr);
+        ->with('qr',$codigo);
     }
 }

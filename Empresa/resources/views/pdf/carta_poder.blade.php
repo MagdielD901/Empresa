@@ -37,8 +37,8 @@
     <div class="qr">
         <p><strong>Verificación QR</strong></p>
         {{-- ⚡️ Insertamos el SVG directamente --}}
-     
-{!! $qr !!}
+     <img src="data:image/svg+xml;base64,{{ $qr }}" alt="">
+
     </div>
 </body>
 </html>
