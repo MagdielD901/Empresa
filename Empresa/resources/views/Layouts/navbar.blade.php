@@ -16,10 +16,15 @@
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-soft-ui-dashboard">Cerrar Sesión</a>
-            </li>
-           
+          <li class="nav-item d-flex align-items-center">
+            <a href="{{ route('logout') }}" class="btn btn-outline-primary btn-sm mb-0 me-3" target="_self" 
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            Cerrar Sesión
+            </a>
+          </li>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
                 <div class="sidenav-toggler-inner">

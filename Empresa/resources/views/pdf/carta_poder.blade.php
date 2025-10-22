@@ -19,7 +19,7 @@
         <strong>Correo:</strong> {{ $user->email }} <br>
         <strong>Rol:</strong> {{ $user->role }} <br>
         <strong>Departamento:</strong> {{ $user->department ?? '—' }} <br>
-        <strong>Estado:</strong> {{ $user->active ? 'Activo' : 'Inactivo' }}
+        <strong>Estado:</strong> {{ $user->active ? 'Activo' : 'Inactivo' }} 
     </div>
 
     <h3>Dispositivos Asignados:</h3>

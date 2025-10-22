@@ -58,3 +58,7 @@ Route::group(['prefix' => 'dashboard'], function(){
 
 Route::get('/users/{id}/carta-poder', [CartaPoderController::class, 'generar'])->name('users.cartaPoder');
 
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->name('logout');
