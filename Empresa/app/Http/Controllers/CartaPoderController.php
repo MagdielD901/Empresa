@@ -9,7 +9,8 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Writer;
-
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class CartaPoderController extends Controller
 {
     public function generar($id)
@@ -18,27 +19,29 @@ class CartaPoderController extends Controller
         $user = User::with('dispositivo')->findOrFail($id);
 
         // Generar QR como SVG (evita usar Imagick/GD)
-        $renderer = new ImageRenderer(
-            new RendererStyle(200),
-            new SvgImageBackEnd()
-        );
-
-        $writer = new Writer($renderer);
+      
+      
 
         // Texto que queremos codificar en el QR (ajústalo si lo deseas)
         $qrText = "Carta Poder - Usuario ID: {$user->id} | Nombre: {$user->name}";
-
+        $path = public_path('qrcode/'.time().'.png');
+        QrCode::size(300)->generate($qrText,$path);
+        $qr= QrCode::size(300)->generate('A simple example of QR code'); 
+       
         // Genera el SVG (string)
-        $qrSvg = $writer->writeString($qrText);
 
         // Pasamos el SVG crudo a la vista. En la vista lo insertaremos con {!! $qrSvg !!}
         $pdf = Pdf::loadView('pdf.carta_poder', [
             'user' => $user,
-            'qrSvg' => $qrSvg,
+            'qr' => $qr,
         ]);
 
         // Descargar automáticamente
         $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $user->name);
         return $pdf->download("Carta_Poder_{$safeName}.pdf");
+      
+        return view('pdf.carta_poder')
+        ->with('user',$user)
+        ->with('qr',$qr);
     }
 }
