@@ -2,24 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Writer;
 
 class CartaPoderController extends Controller
 {
-    public function generarCarta($id)
+    public function generar($id)
     {
-        $user = User::findOrFail($id);
+        // Cargar el usuario con su dispositivo (si tiene)
+        $user = User::with('dispositivo')->findOrFail($id);
 
-        // Datos para el QR
-        $qrData = "Carta poder de: {$user->name} - Email: {$user->email}";
-        $qr = base64_encode(QrCode::format('png')->size(150)->generate($qrData));
+        // Generar QR como SVG (evita usar Imagick/GD)
+        $renderer = new ImageRenderer(
+            new RendererStyle(200),
+            new SvgImageBackEnd()
+        );
 
-        // Generar PDF con la vista Blade
-        $pdf = Pdf::loadView('pdf.carta_poder', compact('user', 'qr'));
+        $writer = new Writer($renderer);
 
-        // Descargar PDF
-        return $pdf->download("CartaPoder_{$user->name}.pdf");
+        // Texto que queremos codificar en el QR (ajústalo si lo deseas)
+        $qrText = "Carta Poder - Usuario ID: {$user->id} | Nombre: {$user->name}";
+
+        // Genera el SVG (string)
+        $qrSvg = $writer->writeString($qrText);
+
+        // Pasamos el SVG crudo a la vista. En la vista lo insertaremos con {!! $qrSvg !!}
+        $pdf = Pdf::loadView('pdf.carta_poder', [
+            'user' => $user,
+            'qrSvg' => $qrSvg,
+        ]);
+
+        // Descargar automáticamente
+        $safeName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $user->name);
+        return $pdf->download("Carta_Poder_{$safeName}.pdf");
     }
 }

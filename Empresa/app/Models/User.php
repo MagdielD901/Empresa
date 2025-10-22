@@ -59,9 +59,13 @@ class User extends Authenticatable
         return $this->active ? 'ACTIVO' : 'INACTIVO';
     }
 
-    public function dispositivos()
+   public function dispositivo()
 {
-    return $this->hasMany(Dispositivo::class, 'usuario_id');
+    return $this->hasOne(Dispositivo::class, 'usuario_id');
 }
+
+
+
+
 
 }

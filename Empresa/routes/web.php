@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DispositivoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CartaPoderController;
+use Illuminate\Support\Facades\Auth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 
 
@@ -37,8 +40,7 @@ Route::put('/devices/{id}/cambiar-estado', [App\Http\Controllers\DispositivoCont
 
 
 //Ruta de la carta poder
-Route::get('/users/{id}/carta-poder', [CartaPoderController::class, 'generarCarta'])->name('users.cartaPoder');
-
+Route::get('/carta-poder', [CartaPoderController::class, 'generarCarta']);
 
 Auth::routes();
 
@@ -52,4 +54,7 @@ Route::group(['prefix' => 'dashboard'], function(){
     Route::get("/users",[UsersController::class,'getUsers']);
     Route::post("/users",[UsersController::class,'createUsers']);
 });
+
+
+Route::get('/users/{id}/carta-poder', [CartaPoderController::class, 'generar'])->name('users.cartaPoder');
 

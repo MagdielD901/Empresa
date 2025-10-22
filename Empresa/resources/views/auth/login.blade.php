@@ -1,186 +1,211 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Página de Login">
-    <meta name="author" content="">
+    <title>Login / Registro</title>
 
-    <title>Login Premium</title>
-
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Iconos de FontAwesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Fuente y FontAwesome -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <style>
-        /* Fondo degradado */
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+        * { box-sizing: border-box; }
+
         body {
-            background: linear-gradient(135deg, #ff6f00, #ff8c00);
-            font-family: 'Nunito', sans-serif;
-            height: 100vh;
+            background: #f6f5f7;
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            margin: -20px 0 50px;
         }
 
-        /* Caja de login más grande y centrada */
-        .login-card {
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            background-color: white;
-            padding: 2rem;
-            width: 100%;
-            max-width: 500px; /* Mayor tamaño de la tarjeta */
-            margin: 0 auto;
-        }
+        h1 { font-weight: bold; margin: 0; }
+        p { font-size: 14px; font-weight: 100; line-height: 20px; letter-spacing: 0.5px; margin: 20px 0 30px; }
+        span { font-size: 12px; }
+        a { color: #333; font-size: 14px; text-decoration: none; margin: 15px 0; }
 
-        /* Cabecera */
-        .login-card-header {
-            text-align: center;
-            background-color: #ff6f00;
-            color: white;
-            border-radius: 1.5rem 1.5rem 0 0;
-            padding: 1.5rem 0;
+        button {
+            border-radius: 20px;
+            border: 1px solid #FF4B2B;
+            background-color: #FF4B2B;
+            color: #FFFFFF;
+            font-size: 12px;
             font-weight: bold;
-            font-size: 1.7rem; /* Título más grande */
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+        }
+        button:active { transform: scale(0.95); }
+        button:focus { outline: none; }
+        button.ghost { background-color: transparent; border-color: #FFFFFF; }
+
+        form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
         }
 
-        /* Cuerpo de la tarjeta */
-        .login-card-body {
-            padding: 2rem;
-        }
-
-        /* Input de texto */
-        .form-control {
-            border-radius: 25px;
-            border-color: #ddd;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: #ff6f00;
-            box-shadow: 0 0 8px rgba(255, 111, 0, 0.7);
-        }
-
-        /* Botón de login */
-        .btn-login {
-            background-color: #ff6f00;
-            border-radius: 25px;
-            padding: 12px;
-            width: 100%;
+        input {
+            background-color: #eee;
             border: none;
-            color: white;
-            font-size: 18px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-login:hover {
-            background-color: #e65c00;
-            transform: translateY(-3px);
-        }
-
-        /* Enlaces */
-        .forgot-password-link, .register-link {
-            color: #ff6f00;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .forgot-password-link:hover, .register-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Botones de redes sociales */
-        .social-btns a {
-            padding: 12px;
-            border-radius: 25px;
-            text-align: center;
+            padding: 12px 15px;
+            margin: 8px 0;
             width: 100%;
-            margin-top: 10px;
-            font-size: 16px;
         }
 
-        .btn-google {
-            background-color: #db4437;
-            color: white;
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
         }
 
-        .btn-facebook {
-            background-color: #4267b2;
-            color: white;
+        .form-container { position: absolute; top: 0; height: 100%; transition: all 0.6s ease-in-out; }
+        .sign-in-container { left: 0; width: 50%; z-index: 2; }
+        .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
+
+        .container.right-panel-active .sign-in-container { transform: translateX(100%); }
+        .container.right-panel-active .sign-up-container { transform: translateX(100%); opacity: 1; z-index: 5; animation: show 0.6s; }
+
+        @keyframes show {
+            0%, 49.99% { opacity: 0; z-index: 1; }
+            50%, 100% { opacity: 1; z-index: 5; }
         }
 
-        .social-btns .btn:hover {
-            transform: translateY(-3px);
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .container.right-panel-active .overlay-container { transform: translateX(-100%); }
+
+        .overlay {
+            background: linear-gradient(to right, #FF4B2B, #FF416C);
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .container.right-panel-active .overlay { transform: translateX(50%); }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-left { transform: translateX(-20%); }
+        .container.right-panel-active .overlay-left { transform: translateX(0); }
+
+        .overlay-right { right: 0; transform: translateX(0); }
+        .container.right-panel-active .overlay-right { transform: translateX(20%); }
+
+        .social-container { margin: 20px 0; }
+        .social-container a {
+            border: 1px solid #DDDDDD;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            height: 40px;
+            width: 40px;
         }
     </style>
 </head>
-
 <body>
+    <div class="container" id="container">
+        <!-- Sign Up -->
+        <div class="form-container sign-up-container">
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+                <h1>Crear cuenta</h1>
+                <input type="text" name="name" placeholder="Nombre" required />
+                <input type="email" name="email" placeholder="Correo electrónico" required />
+                <input type="password" name="password" placeholder="Contraseña" required />
+                <input type="password" name="password_confirmation" placeholder="Confirmar contraseña" required />
+                <button type="submit">Registrarse</button>
+            </form>
+        </div>
 
-    <div class="container">
-        <div class="login-card">
-            <div class="login-card-header">
-                <h3>¡Bienvenido de nuevo!</h3>
-            </div>
-            <div class="login-card-body">
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <!-- Campo de email -->
-                    <div class="form-group mb-3">
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Correo electrónico" required autofocus>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+        <!-- Sign In -->
+        <div class="form-container sign-in-container">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <h1>Iniciar sesión</h1>
+                <input type="email" name="email" placeholder="Correo electrónico" required autofocus />
+                <input type="password" name="password" placeholder="Contraseña" required />
+                <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
 
-                    <!-- Campo de contraseña -->
-                    <div class="form-group mb-3">
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Contraseña" required>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- Recordar contraseña -->
-                    <div class="form-group form-check mb-3">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">Recuérdame</label>
-                    </div>
-
-                    <!-- Botón de inicio de sesión -->
-                    <button type="submit" class="btn-login mb-3">Iniciar sesión</button>
-
-                    <!-- Enlaces de ayuda -->
-                    <div class="d-flex justify-content-between mb-3">
-                        <a href="{{ route('password.request') }}" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
-                        <a href="{{ route('register') }}" class="register-link">Crear cuenta</a>
-                    </div>
-
-                    <hr>
-
-                    <!-- Botones de redes sociales -->
-                    <div class="social-btns">
-                        <a href="#" class="btn btn-google"><i class="fab fa-google"></i> Iniciar sesión con Google</a>
-                        <a href="#" class="btn btn-facebook"><i class="fab fa-facebook-f"></i> Iniciar sesión con Facebook</a>
-                    </div>
-                </form>
+        <!-- Overlay -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>¡Bienvenido de nuevo!</h1>
+                    <p>Para mantenerte conectado, inicia sesión con tus datos personales</p>
+                    <button class="ghost" id="signIn">Iniciar sesión</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>¡Bienvenido!</h1>
+                    <p>Ingresa tus datos personales y comienza tu viaje con nosotros</p>
+                    <button class="ghost" id="signUp">Registrarse</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS y Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-</body>
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
 
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
+    </script>
+</body>
 </html>
